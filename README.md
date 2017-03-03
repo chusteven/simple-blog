@@ -5,4 +5,8 @@ A simple weblog with search functionality based on a [tutorial](http://charlesle
 
 # Install requirements
 
+````
+pip install -r requirements.txt
+````
+
 # Running the application
