@@ -16,7 +16,7 @@ virtualenv flask-blog
 source flask-blog/bin/activate
 ````
 
-Note: to deactivate this virtaul environment, simply run:
+**Note: to deactivate this virtaul environment, simply run:**
 
 ````
 deactivate
