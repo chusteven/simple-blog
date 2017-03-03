@@ -1,0 +1,5 @@
+*.DS_Store
+*.ipynb
+*.db
+blog/
+dev-notes.txt
