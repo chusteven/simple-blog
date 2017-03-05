@@ -175,7 +175,6 @@ class FTSEntry(FTSModel):
 	class Meta:
 		database = database
 
-	@classmethod
 	def _get_pk_value(self):
 		"""
 		This is a hack, I think. Look at the documentation here: https://github.com/coleifer/peewee/blob/master/peewee.py - 
@@ -275,12 +274,6 @@ def _create_or_edit(entry, template):
 		entry.title = request.form.get("title") or ""
 		entry.content = request.form.get("content") or ""
 		entry.published = request.form.get("published") or False
-
-
-
-		# todo: complete this and below
-		# fentry = FTSEntry.select().where()
-
 
 		if not (entry.title and entry.content):
 			flash("Title and Content are required.", "danger")
