@@ -2,8 +2,6 @@
 
 
 
-
-
 #
 # Imports
 #
@@ -37,45 +35,49 @@ from playhouse.sqlite_ext import *
 
 
 
-
-
 #
-# Application constants
+# Application constants and configurations
 #
 
 ADMIN_PASSWORD = os.environ.get("FLASK_BLOG_ADMIN_PASSWORD", "password")
 
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
-DATABASE_PATH = os.path.join(APP_DIR, "blog.db")
+
+# the playhouse.flask_utils.FlaskDB object accepts database URL configuration.
+DATABASE_PATH = os.path.join(APP_DIR, "blog.db") 
 DATABASE = "sqliteext:///{}".format(DATABASE_PATH)
 
 DEBUG = False
 
+# todo: research
 # todo: externalize this key to an more secure location (or use one-way hashing)
-# todo: research below statement's meaning
 # used by Flask to encrypt session cookie
 SECRET_KEY = "shhh, secret!"  
+
+# todo: research
+# used by micawber, which will attempt to generate rich media
+# embedded objects with maxwidth = 800.
 SITE_WIDTH = 800
 
-
-
-
-
-#
-# Initializing application and all necessary components (configurations, etc.)
-#
-
+# todo: research
+# creating a Flask WSGI app, configure it with values from module
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 # todo: research
+# FlaskDB wraps application object, allowing pre/post-request hooks
+# for managing database connections
 flask_db = FlaskDB(app)
+
+# todo: research
+# actual peewee database (as opposed to flask_db, which is only wrapper)
 database = flask_db.database
 
 # todo: research
+# configure micawber with the default OEmbed providers (YouTube, Flickr, etc).
+# to use a simple in-memory cache so that multiple requests for the same
+# video don't require multiple network requests
 oembed_providers = bootstrap_basic(OEmbedCache())
-
-
 
 
 
@@ -105,13 +107,13 @@ class Entry(flask_db.Model):
 		return Markup(oembed_content)
 
 	def save(self, *args, **kwargs):
-		# ...
+		# if no slug, then create one out of blog post title
 		if not self.slug:
-			self.slug = re.sub('[^\w]+', '-', self.title.lower())
+			self.slug = re.sub("[^\w]+", "-," self.title.lower())
 
 		# todo: research what this is doing under the hood
-		# 	- what is happening with the fields?
-		# 	- what is returned?
+		# what is happening with the fields?
+		# what is returned?
 		ret = super(Entry, self).save(*args, **kwargs)
 
 		# todo: research
@@ -175,8 +177,10 @@ class FTSEntry(FTSModel):
 	class Meta:
 		database = database
 
+
+
 #
-# Finish this entity
+# todo: finish this entity
 #
 
 class Comment(flask_db.Model):
@@ -190,10 +194,8 @@ class Comment(flask_db.Model):
 
 
 
-
-
 #
-# Adding some handlers
+# Handlers
 #
 
 def login_required(fn):
@@ -243,7 +245,9 @@ def index():
 		query = Entry.public().order_by(Entry.timestamp.desc())
 
 	# because, either way, shit gets rendered!
+
 	# todo: research why i had to add check_bounds = false
+	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
 	return object_list("index.html", query, search = search_query, check_bounds = False)
 
 @app.route("/drafts/")
@@ -320,8 +324,6 @@ def detail(slug):
 
 
 
-
-
 #
 # Application intiailization code
 #
@@ -353,17 +355,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
