@@ -1,7 +1,6 @@
 #!blog/bin/python
 
 
-
 #
 # Imports
 #
@@ -32,7 +31,6 @@ from peewee import *
 # todo: research
 from playhouse.flask_utils import FlaskDB, get_object_or_404, object_list
 from playhouse.sqlite_ext import *
-
 
 
 #
@@ -80,7 +78,6 @@ database = flask_db.database
 oembed_providers = bootstrap_basic(OEmbedCache())
 
 
-
 #
 # Entities
 #
@@ -109,7 +106,7 @@ class Entry(flask_db.Model):
 	def save(self, *args, **kwargs):
 		# if no slug, then create one out of blog post title
 		if not self.slug:
-			self.slug = re.sub("[^\w]+", "-," self.title.lower())
+			self.slug = re.sub("[^\w]+", "-", self.title.lower())
 
 		# todo: research what this is doing under the hood
 		# what is happening with the fields?
@@ -127,11 +124,9 @@ class Entry(flask_db.Model):
 		try:
 			fts_entry = FTSEntry.get(FTSEntry.entry_id == self.id)
 		except FTSEntry.DoesNotExist:
-			print("This is a new record!!!")
 			fts_entry = FTSEntry(entry_id = self.id)
 			force_insert = True
 		else:
-			print("We should be persisting this record!!!")
 			force_insert = False
 		# one long string is title plus the content
 		fts_entry.content = "\n".join((self.title, self.content))
@@ -141,14 +136,16 @@ class Entry(flask_db.Model):
 
 	@classmethod
 	def public(cls):
-		return Entry.select().where(Entry.published == True)
+		return Entry.select()\
+					.where(Entry.published == True)
 
 	@classmethod
 	def search(cls, query):
 		words = [word.strip() for word in query.split() if word.strip()]
 		if not words:
 			# return empty entity???
-			return Entry.select().where(Entry.id == 0)
+			return Entry.select()\
+						.where(Entry.id == 0)
 		else:
 			search = " ".join(words)
 
@@ -167,7 +164,8 @@ class Entry(flask_db.Model):
 
 	@classmethod
 	def drafts(cls):
-		return Entry.select().where(Entry.published == False)
+		return Entry.select()\
+					.where(Entry.published == False)
 
 class FTSEntry(FTSModel):
 	entry_id = IntegerField()
@@ -177,6 +175,15 @@ class FTSEntry(FTSModel):
 	class Meta:
 		database = database
 
+	@classmethod
+	def _get_pk_value(self):
+		"""
+		This is a hack, I think. Look at the documentation here: https://github.com/coleifer/peewee/blob/master/peewee.py - 
+		particulary at the save() method on line 5059. For whatever reason, _get_pk_value() method of my particular FTSEntry class
+		is returning None. What it _should_ return is the docid stored internally by SQLite.
+		Should try and figure out why this is the case.
+		"""
+		return self.entry_id
 
 
 #
@@ -191,7 +198,6 @@ class Comment(flask_db.Model):
 
 	def save(self, *args, **kwargs):
 		return super(Comment, self).save(*args, **kwargs)
-
 
 
 #
@@ -242,7 +248,8 @@ def index():
 	if search_query:
 		query = Entry.search(search_query)
 	else:
-		query = Entry.public().order_by(Entry.timestamp.desc())
+		query = Entry.public()\
+					 .order_by(Entry.timestamp.desc())
 
 	# because, either way, shit gets rendered!
 
@@ -253,7 +260,8 @@ def index():
 @app.route("/drafts/")
 @login_required
 def drafts():
-	query = Entry.drafts().order_by(Entry.timestamp.desc())
+	query = Entry.drafts()\
+				 .order_by(Entry.timestamp.desc())
 	# todo: research why check_bounds is false
 	# http://docs.peewee-orm.com/en/latest/peewee/playhouse.html
 	return object_list("index.html", query, check_bounds  = False)
@@ -323,7 +331,6 @@ def detail(slug):
 	return render_template("detail.html", entry = entry)
 
 
-
 #
 # Application intiailization code
 #
@@ -352,6 +359,11 @@ def main():
 	# todo: research what the safe argument is good for
 	database.create_tables([Entry, FTSEntry], safe = True)
 	app.run(debug = True)
+
+
+#
+# Running the damn thing
+#
 
 if __name__ == "__main__":
 	main()
