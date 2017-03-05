@@ -12,8 +12,8 @@ brew install python-pip python-dev python-virtualenv
 Set up a Python virtual envrionment and activate it:
 
 ````
-virtualenv flask-blog
-source flask-blog/bin/activate
+virtualenv blog
+source blog/bin/activate
 ````
 
 **Note: to deactivate this virtaul environment, simply run:**
