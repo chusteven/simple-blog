@@ -171,10 +171,6 @@ class FTSEntry(FTSModel):
 	entry_id = IntegerField()
 	content = TextField()
 
-	# todo: research what use this is
-	class Meta:
-		database = database
-
 	def _get_pk_value(self):
 		"""
 		This is a hack, I think. Look at the documentation here: https://github.com/coleifer/peewee/blob/master/peewee.py - 
@@ -183,6 +179,10 @@ class FTSEntry(FTSModel):
 		Should try and figure out why this is the case.
 		"""
 		return self.entry_id
+
+	# todo: research what use this is
+	class Meta:
+		database = database
 
 
 #
@@ -250,7 +250,7 @@ def index():
 		query = Entry.public()\
 					 .order_by(Entry.timestamp.desc())
 
-	# because, either way, shit gets rendered!
+	# because, either way, the stuff will get rendered!
 
 	# todo: research why i had to add check_bounds = false
 	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
@@ -355,7 +355,7 @@ def main():
 
 
 #
-# Running the damn thing
+# Running the thing
 #
 
 if __name__ == "__main__":
