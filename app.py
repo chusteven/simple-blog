@@ -62,6 +62,10 @@ SITE_WIDTH = 800
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+# this for debugging purposes
+# todo: remove when move to production
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
 # todo: research
 # FlaskDB wraps application object, allowing pre/post-request hooks
 # for managing database connections
@@ -96,6 +100,25 @@ class Entry(flask_db.Model):
 		hilite = CodeHiliteExtension(linenums = False, css_class = "highlight")
 		extras = ExtraExtension()
 		markdown_content = markdown(self.content, extensions = [hilite, extras])
+		oembed_content = parse_html(
+			markdown_content, 
+			oembed_providers, 
+			urlize_all = True, 
+			maxwidth = app.config["SITE_WIDTH"])
+		return Markup(oembed_content)
+
+	# a hackneyed convience method for the first page
+	# 	displaying only the first few characters of a thing
+	def html_content_preview(self, limit):
+		hilite = CodeHiliteExtension(linenums = False, css_class = "highlight")
+		extras = ExtraExtension()
+
+		# adding ellipsis if necessary, otherwise entire content is the preview
+		if (len(self.content) <= limit):
+			markdown_content = markdown(self.content, extensions = [hilite, extras])
+		else:
+			markdown_content = markdown(self.content[:limit - 3] + "&hellip;", extensions = [hilite, extras])
+
 		oembed_content = parse_html(
 			markdown_content, 
 			oembed_providers, 
@@ -254,7 +277,7 @@ def index():
 
 	# todo: research why i had to add check_bounds = false
 	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
-	return object_list("index.html", query, search = search_query, check_bounds = False)
+	return object_list("index-test.html", query, paginate_by = 7, search = search_query, check_bounds = False)
 
 @app.route("/drafts/")
 @login_required
@@ -263,7 +286,7 @@ def drafts():
 				 .order_by(Entry.timestamp.desc())
 	# todo: research why check_bounds is false
 	# http://docs.peewee-orm.com/en/latest/peewee/playhouse.html
-	return object_list("index.html", query, check_bounds  = False)
+	return object_list("index-test.html", query, paginate_by = 7, check_bounds  = False)
 
 
 ### THIS IS A UTILITY METHOD
@@ -348,10 +371,21 @@ def not_found(exc):
 	return Response("<h3>Not found</h3>"), 404
 
 def main():
+	# for specifying files to watch: http://stackoverflow.com/questions/9508667/reload-flask-app-when-template-file-changes
+	# todo: remove for production
+	extra_dirs = [os.path.join(APP_DIR, "templates/"),]
+	extra_files = extra_dirs[:]
+	for extra_dir in extra_dirs:
+		for dirname, dirs, files in os.walk(extra_dir):
+			for filename in files:
+				filename = os.path.join(dirname, filename)
+				if os.path.isfile(filename):
+					extra_files.append(filename)
+
 	# this creates tables if non existent already
 	# todo: research what the safe argument is good for
 	database.create_tables([Entry, FTSEntry], safe = True)
-	app.run(debug = True)
+	app.run(debug = True, extra_files = extra_files)
 
 
 #

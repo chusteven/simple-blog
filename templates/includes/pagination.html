@@ -1,5 +1,5 @@
 {% if pagination.get_page_count() > 1 %}
-<ul class="pager">
+<ul class="pagination">
   {% if pagination.get_page() > 1 %}
     <li class="previous"><a href="./?{{ request.args|clean_querystring('page', page=pagination.get_page() - 1) }}">&laquo; Previous {{ pagination.get_page() - 1 }} / {{ pagination.get_page_count() }}</a></li>
   {% else %}
