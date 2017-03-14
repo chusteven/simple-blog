@@ -4,6 +4,7 @@
 
 {% block content_title %}Log out{% endblock %}
 
+<!-- for logging out -->
 {% block content %}
   <p>Click the button below to log out of the site.</p>
   <form action="{{ url_for('logout') }}" class="form-horizontal" method="post">

@@ -178,7 +178,7 @@ class FTSEntry(FTSModel):
 		is returning None. What it _should_ return is the docid stored internally by SQLite.
 		Should try and figure out why this is the case.
 		"""
-		return self.entry_id
+		return self.docid
 
 	# todo: research what use this is
 	class Meta:

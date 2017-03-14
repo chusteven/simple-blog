@@ -6,8 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/blog.min.css') }}" />
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/hilite.css') }}" />
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}" />
   {% block extra_head %}{% endblock %}
   <script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -15,8 +14,14 @@
 </head>
 
 <body>
-  <div class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
+  
+  <!-- everything lives inside this container -->
+  <div class="container">
+
+    <!-- this is the navigation bar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+
+      <!-- not sure what this is entirely -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
@@ -24,9 +29,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <!-- there will always be this link -->
         <a class="navbar-brand" href="{{ url_for('index') }}">Blog</a>
       </div>
+
       <div class="navbar-collapse collapse">
+        <!-- these things will be available is the user is logged in -->
         <ul class="nav navbar-nav">
           {% if session.logged_in %}
           <li><a href="{{ url_for('drafts') }}">Drafts</a></li>
@@ -35,18 +43,19 @@
           {% endif %}
           {% block extra_header %}{% endblock %}
         </ul>
+
+        <!-- this is for the search functionality -->
         {% block search_bar %}
         <form action="{{ url_for('index') }}" class="navbar-form navbar-right" id="search-form" method="get" role="search">
-          <div class="form-group">
+          <div class="form-group" style="padding-right:15px;">
             <input class="form-control" name="q" placeholder="Search" type="text" value="{% if search %}{{ search }}{% endif %}">
           </div>
         </form>
         {% endblock %}
       </div>
     </div>
-  </div>
 
-  <div class="container">
+    <!-- for flashing messages -->
     {% for category, message in get_flashed_messages(with_categories=true) %}
     <div class="alert alert-{{ category }} alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -54,12 +63,15 @@
     </div>
     {% endfor %}
 
+    <!-- not sure what this is... -->
     {% block page_header %}
     <div class="page-header">
+      <!-- for displaying the title of the page -->
       <h1>{% block content_title %}{% endblock %}</h1>
     </div>
     {% endblock %}
 
+    <!-- for displaying the content of the page -->
     {% block content %}{% endblock %}
 
     <footer>

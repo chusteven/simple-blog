@@ -4,17 +4,28 @@
 
 {% block content_title %}{% if search %}Search "{{ search }}"{% else %}Blog entries{% endif %}{% endblock %}
 
-{% block content %}
+<!-- the content of this page consists of
+  all the entries -->
+  {% block content %}
   {% for entry in object_list %}
-    {% if search %}
-      {% set entry = entry.entry %}
-    {% endif %}
-    <h3>
-      <a href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
-        {{ entry.title }}
-      </a>
-    </h3>
-    <p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I%p') }}</p>
+  {% if search %}
+  {% set entry = entry.entry %}
+  {% endif %}
+  <div class="row">
+    <div class="col-md-4">
+      <!-- a link to the relevant page -->
+      <h3>
+        <a href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
+          {{ entry.title }}
+        </a>
+      </h3>
+      <!-- a preview of the content
+      as well as information on when the post was created -->
+      <p>{{ entry.content[:200]}}</p>
+      <p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I %p') }}</p>
+    </div>
+    <div class="col-md-8"></div>
+  </div>
   {% endfor %}
   {% include "includes/pagination.html" %}
-{% endblock %}
+  {% endblock %}
