@@ -43,7 +43,7 @@ APP_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # the playhouse.flask_utils.FlaskDB object accepts database URL configuration.
 DATABASE_PATH = os.path.join(APP_DIR, "blog.db") 
-DATABASE = "sqliteext:///{}".format(DATABASE_PATH)
+DATABASE = "sqliteext:///{}?check_same_thread=False".format(DATABASE_PATH)
 
 DEBUG = False
 
@@ -385,7 +385,7 @@ def main():
 	# this creates tables if non existent already
 	# todo: research what the safe argument is good for
 	database.create_tables([Entry, FTSEntry], safe = True)
-	app.run(debug = True, extra_files = extra_files)
+	app.run(debug = DEBUG, extra_files = extra_files)
 
 
 #

@@ -4,3 +4,4 @@ micawber
 pygments
 markdown
 peewee
+uwsgi
