@@ -37,7 +37,7 @@ from playhouse.sqlite_ext import *
 # Application constants and configurations
 #
 
-ADMIN_PASSWORD = os.environ.get("FLASK_BLOG_ADMIN_PASSWORD", "password")
+ADMIN_PASSWORD = os.environ.get("FLASK_BLOG_ADMIN_PASSWORD")
 
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
 
