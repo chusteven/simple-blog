@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}About this website{% endblock %}
+
+{% block content_title %}About this website{% endblock %}
+
+{% block content %}
+  <p>This page was made with the following tools:</p>
+  <ul>
+    <li><a href="http://flask.pocoo.org/">Flask</a> - for serving the application overall</li>
+    <li><a href="https://www.sqlite.org/">SQLite</a> - for storing the content; also provides the search functionality</li>
+
+    <li><a href="https://pypi.python.org/pypi/Markdown">markdown</a> - for rendering HTML-friendly representation of Markdown</li>
+    <li><a href="https://pypi.python.org/pypi/micawber">micawber</a> - for embedding rich content from URLs</li>
+    <li><a href="https://pypi.python.org/pypi/peewee">peewee</a> and <a href="http://docs.peewee-orm.com/en/latest/peewee/playhouse.html">playhouse</a> - for object-relational mapping</li>
+  </ul>
+{% endblock %}

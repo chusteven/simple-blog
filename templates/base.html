@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Blog</title>
+  <title>Wu-Tang Clan Ain't Nothing to Fuck With</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,12 +35,12 @@
         <ul class="nav navbar-nav">
           <!-- there will always be these link 
           note: these are looking for method names, not HTML files -->
-          <li><a href="{{ url_for('index') }}">BLOG</a></li>
-          <li><a href="#">ABOUT THIS SITE</a></li>
+          <li><a href="{{ url_for('index') }}">Entries</a></li>
+          <li><a href="{{ url_for('about') }}">About This Site</a></li>
           {% if session.logged_in %}
-          <li><a href="{{ url_for('drafts') }}">DRAFTS</a></li>
-          <li><a href="{{ url_for('create') }}">CREATE ENTRY</a></li>
-          <li><a href="{{ url_for('logout') }}">LOG OUT</a></li>
+          <li><a href="{{ url_for('drafts') }}">Drafts</a></li>
+          <li><a href="{{ url_for('create') }}">Create Entry</a></li>
+          <li><a href="{{ url_for('logout') }}">Log Out</a></li>
           {% endif %}
           {% block extra_header %}{% endblock %}
         </ul>
@@ -83,7 +83,7 @@
 
     <footer>
       <hr />
-      <p>Blog &copy; 2015</p>
+      <p>Steven Chu &copy; 2017</p>
     </footer>
   </div>
   

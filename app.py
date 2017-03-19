@@ -277,7 +277,11 @@ def index():
 
 	# todo: research why i had to add check_bounds = false
 	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
-	return object_list("index-test.html", query, paginate_by = 7, search = search_query, check_bounds = False)
+	return object_list("index.html", query, paginate_by = 5, check_bounds = False, search = search_query)
+
+@app.route("/about")
+def about():
+	return render_template("about.html")
 
 @app.route("/drafts/")
 @login_required
@@ -286,7 +290,7 @@ def drafts():
 				 .order_by(Entry.timestamp.desc())
 	# todo: research why check_bounds is false
 	# http://docs.peewee-orm.com/en/latest/peewee/playhouse.html
-	return object_list("index-test.html", query, paginate_by = 7, check_bounds  = False)
+	return object_list("index.html", query, paginate_by = 5, check_bounds  = False, title = "Drafts")
 
 
 ### THIS IS A UTILITY METHOD
