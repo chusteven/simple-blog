@@ -38,14 +38,12 @@ from playhouse.sqlite_ext import *
 #
 
 ADMIN_PASSWORD = os.environ.get("FLASK_BLOG_ADMIN_PASSWORD")
-
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
+DEBUG = False
 
 # the playhouse.flask_utils.FlaskDB object accepts database URL configuration.
 DATABASE_PATH = os.path.join(APP_DIR, "blog.db") 
 DATABASE = "sqliteext:///{}?check_same_thread=False".format(DATABASE_PATH)
-
-DEBUG = False
 
 # todo: research
 # todo: externalize this key to an more secure location (or use one-way hashing)
@@ -61,10 +59,6 @@ SITE_WIDTH = 800
 # creating a Flask WSGI app, configure it with values from module
 app = Flask(__name__)
 app.config.from_object(__name__)
-
-# this for debugging purposes
-# todo: remove when move to production
-app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # todo: research
 # FlaskDB wraps application object, allowing pre/post-request hooks
@@ -86,7 +80,6 @@ oembed_providers = bootstrap_basic(OEmbedCache())
 # Entities
 #
 
-# todo: research how subclassing works in Python
 class Entry(flask_db.Model):
 	title = CharField() # maybe this object comes from peewee...
 	slug = CharField(unique = True) # note: constraints can apply
@@ -156,6 +149,21 @@ class Entry(flask_db.Model):
 
 		# todo: research if force_insert is something like "upsert" or not
 		fts_entry.save(force_insert = force_insert)
+
+	def _delete(self, *args, **kwargs):
+		# todo: research why delete_instance() isn't work the way i'd expect it to
+		query = Entry.delete()\
+					 .where(Entry.id == self.id)
+		query.execute()
+
+		# go on and delete the relevant FTS tables
+		self.update_search_index_delete()
+
+	def update_search_index_delete(self):
+		# todo: consider wrapping this in a try?
+		query = FTSEntry.delete()\
+						.where(FTSEntry.entry_id == self.id)
+		query.execute()
 
 	@classmethod
 	def public(cls):
@@ -275,7 +283,7 @@ def index():
 
 	# because, either way, the stuff will get rendered!
 
-	# todo: research why i had to add check_bounds = false
+	# todo: research why i had to add check_bounds = False
 	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
 	return object_list("index.html", query, paginate_by = 5, check_bounds = False, search = search_query)
 
@@ -288,8 +296,6 @@ def about():
 def drafts():
 	query = Entry.drafts()\
 				 .order_by(Entry.timestamp.desc())
-	# todo: research why check_bounds is false
-	# http://docs.peewee-orm.com/en/latest/peewee/playhouse.html
 	return object_list("index.html", query, paginate_by = 5, check_bounds  = False, title = "Drafts")
 
 
@@ -349,6 +355,16 @@ def detail(slug):
 	# todo: research how this method works
 	entry = get_object_or_404(query, Entry.slug == slug)
 	return render_template("detail.html", entry = entry)
+
+@app.route("/<slug>/delete")
+@login_required
+def delete(slug):
+	# get particular entry and delete
+	entry = Entry.get(Entry.slug == slug)
+	entry._delete()
+
+	# redirect towards index page
+	return redirect(url_for("index"))
 
 
 #
