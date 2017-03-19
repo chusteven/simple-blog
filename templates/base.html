@@ -15,10 +15,7 @@
 
 <body>
 
-  <!-- everything lives inside this container -->
-  <div class="container">
-
-    <!-- this is the navigation bar -->
+<!-- this is the navigation bar - equally spaced from left/right margins -->
     <div class="navbar navbar-default navbar-static-top" role="navigation">
 
       <!-- not sure what this is entirely -->
@@ -29,26 +26,31 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <!-- there will always be this link -->
-        <a class="navbar-brand" href="{{ url_for('index') }}">Blog</a>
+        
+
       </div>
 
       <div class="navbar-collapse collapse">
         <!-- these things will be available is the user is logged in -->
         <ul class="nav navbar-nav">
+          <!-- there will always be these link 
+          note: these are looking for method names, not HTML files -->
+          <li><a href="{{ url_for('index') }}">BLOG</a></li>
+          <li><a href="#">ABOUT THIS SITE</a></li>
           {% if session.logged_in %}
-          <li><a href="{{ url_for('drafts') }}">Drafts</a></li>
-          <li><a href="{{ url_for('create') }}">Create Entry</a></li>
-          <li><a href="{{ url_for('logout') }}">Log out</a></li>
+          <li><a href="{{ url_for('drafts') }}">DRAFTS</a></li>
+          <li><a href="{{ url_for('create') }}">CREATE ENTRY</a></li>
+          <li><a href="{{ url_for('logout') }}">LOG OUT</a></li>
           {% endif %}
           {% block extra_header %}{% endblock %}
         </ul>
 
-        <!-- this is for the search functionality -->
+        <!-- this is for the search functionality 
+        note: might need to fix the search width -->
         {% block search_bar %}
         <form action="{{ url_for('index') }}" class="navbar-form navbar-right" id="search-form" method="get" role="search">
           <div class="form-group" style="padding-right:15px;">
-            <input class="form-control" name="q" placeholder="Search" type="text" value="{% if search %}{{ search }}{% endif %}">
+            <input class="form-control" style="width:320px;" name="q" placeholder="Search" type="text" value="{% if search %}{{ search }}{% endif %}">
           </div>
         </form>
         {% endblock %}
@@ -63,13 +65,18 @@
     </div>
     {% endfor %}
 
+    
+
+  <!-- everything lives inside this container -->
+  <div class="container">
+
     <!-- not sure what this is... -->
     {% block page_header %}
     <div class="page-header">
       <!-- for displaying the title of the page -->
       <h1>{% block content_title %}{% endblock %}</h1>
     </div>
-    {% endblock %}
+    {% endblock %}    
 
     <!-- for displaying the content of the page -->
     {% block content %}{% endblock %}

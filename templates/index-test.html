@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Blog entries{% endblock %}
+{% block title %}Wu-Tang Clan Ain't Nothing to Fuck With{% endblock %}
 
-{% block content_title %}{% if search %}Search "{{ search }}"{% else %}Blog entries{% endif %}{% endblock %}
+{% block content_title %}{% if search %}Search "{{ search }}"{% else %}Wu-Tang Clan Ain't Nothing to Fuck With{% endif %}{% endblock %}
 
 <!-- the content of this page consists of
   all the entries -->
   <div class="row">
 
     {% block content %}
-    <div class="col-md-5">
+    <div class="col-md-7">
       {% for entry in object_list %}
       {% if search %}
       {% set entry = entry.entry %}
@@ -23,14 +23,17 @@
       <!-- a preview of the content
       as well as information on when the post was created -->
       <p>{{ entry.html_content_preview(200)}}</p>
-      <p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I %p') }}</p>
+      <p><small><i>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I %p') }}</i></small></p>
 
       {% endfor %}
     </div>
-    <div class="col-md-7">
+    <div class="col-md-5">
       <img src="../static/images/jtree.png" class="img-rounded img-responsive" alt="Joshua Tree">
     </div>
   </div>
 
-      {% include "includes/pagination.html" %}  
+  <div class="container">
+    {% include "includes/pagination.html" %}  
+  </div>
+  
   {% endblock %}
