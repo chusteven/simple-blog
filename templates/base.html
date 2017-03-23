@@ -40,9 +40,9 @@
           {% if session.logged_in %}
           <li><a href="{{ url_for('drafts') }}">DRAFTS</a></li>
           <li><a href="{{ url_for('create') }}">CREATE ENTRY</a></li>
-          <li><a href="{{ url_for('logout') }}">LOG OUT</a></li>
           {% endif %}
           {% block extra_header %}{% endblock %}
+          <li><a href="{{ url_for('logout') }}">LOG OUT</a></li>
         </ul>
 
         <!-- this is for the search functionality 
