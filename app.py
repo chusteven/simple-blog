@@ -264,6 +264,7 @@ def login():
 	return render_template("login.html", next_url = next_url)
 
 @app.route("/logout/", methods = ["GET", "POST"])
+@login_required
 def logout():
 	if request.method == "POST":
 		# cleaning all session of its attributes
