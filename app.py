@@ -288,7 +288,7 @@ def index():
 	# todo: research more on this method (pagination, especially) here: http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
 	return object_list("index.html", query, paginate_by = 5, check_bounds = False, search = search_query)
 
-@app.route("/about")
+@app.route("/about/")
 def about():
 	return render_template("about.html")
 
@@ -357,7 +357,7 @@ def detail(slug):
 	entry = get_object_or_404(query, Entry.slug == slug)
 	return render_template("detail.html", entry = entry)
 
-@app.route("/<slug>/delete")
+@app.route("/<slug>/delete/")
 @login_required
 def delete(slug):
 	# get particular entry and delete

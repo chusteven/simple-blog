@@ -1,5 +1,6 @@
 *.DS_Store
 *.db
+_app.py
 app.ini
 wsgi.py
 blog/
