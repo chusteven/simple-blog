@@ -7,8 +7,8 @@
 <!-- link for editing the entry as well as deleting it -->
 {% block extra_header %}
   {% if session.logged_in %}
-    <li><a href="{{ url_for('edit', slug=entry.slug) }}">Edit entry</a></li>
-    <li><a href="#" data-href="{{ url_for('delete', slug=entry.slug) }}" data-toggle="modal" data-target="#confirm-delete">Delete entry</a></li>
+    <li><a href="{{ url_for('edit', slug=entry.slug) }}">EDIT ENTRY</a></li>
+    <li><a href="#" data-href="{{ url_for('delete', slug=entry.slug) }}" data-toggle="modal" data-target="#confirm-delete">DELETE ENTRY</a></li>
   {% endif %}
 {% endblock %}
 

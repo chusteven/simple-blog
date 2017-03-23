@@ -39,7 +39,7 @@ from playhouse.sqlite_ext import *
 
 ADMIN_PASSWORD = os.environ.get("FLASK_BLOG_ADMIN_PASSWORD")
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
-DEBUG = False
+DEBUG = True
 
 # the playhouse.flask_utils.FlaskDB object accepts database URL configuration.
 DATABASE_PATH = os.path.join(APP_DIR, "blog.db") 
@@ -48,7 +48,7 @@ DATABASE = "sqliteext:///{}?check_same_thread=False".format(DATABASE_PATH)
 # todo: research
 # todo: externalize this key to an more secure location (or use one-way hashing)
 # used by Flask to encrypt session cookie
-SECRET_KEY = "shhh, secret!"  
+SECRET_KEY = "shhh, secret!"
 
 # todo: research
 # used by micawber, which will attempt to generate rich media
