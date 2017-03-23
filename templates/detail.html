@@ -14,6 +14,14 @@
 
 <!-- content of the entry itself -->
 {% block content %}
+	<!-- script for deletion -->
+	<script type="text/javascript">
+		// todo: research how this works, in more detail
+		$("#confirm-delete").on("show.bs.modal", function(e) {
+		    $(this).find(".btn-ok").attr("href", $(e.relatedTarget).data("href"));
+		});
+	</script>
+	
 	<p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I%p') }}</p>
 	{{ entry.html_content }}
 
@@ -31,12 +39,4 @@
 	        </div>
 	    </div>
 	</div>
-
-	<!-- script for deletion -->
-	<script type="text/javascript">
-		// todo: research how this works, in more detail
-		$("#confirm-delete").on("show.bs.modal", function(e) {
-		    $(this).find(".btn-ok").attr("href", $(e.relatedTarget).data("href"));
-		});
-	</script>
 {% endblock %}
