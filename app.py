@@ -203,13 +203,11 @@ class FTSEntry(FTSModel):
 	content = TextField()
 
 	def _get_pk_value(self):
-		"""
-		This is a hack, I think. Look at the documentation here: https://github.com/coleifer/peewee/blob/master/peewee.py - 
+		"""This is a hack, I think. Look at the documentation here: https://github.com/coleifer/peewee/blob/master/peewee.py - 
 		particulary at the save() method on line 5059. For whatever reason, _get_pk_value() method of my particular FTSEntry class
-		is returning None. What it _should_ return is the docid stored internally by SQLite.
-		Should try and figure out why this is the case.
-		"""
-		return self.docid
+		is returning None. What it _should_ return is the docid (or whatever other field serves as the primary key!) stored 
+		internally by SQLite. Should try and figure out why this is the case."""
+		return self.entry_id
 
 	# todo: research what use this is
 	class Meta:
