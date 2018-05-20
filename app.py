@@ -5,11 +5,13 @@
 # Imports
 #
 
+import pytz
 import datetime
 import functools
 import os
 import re
 import urllib
+import dateutil.parser
 
 # todo: research abort, flash, request, Response
 # todo: research how url_for() method works
@@ -74,6 +76,16 @@ database = flask_db.database
 # to use a simple in-memory cache so that multiple requests for the same
 # video don't require multiple network requests
 oembed_providers = bootstrap_basic(OEmbedCache())
+
+# for custom filtering on datetime values...
+def datetime_format(value, format = '%m/%d/%Y at %I:%M %p'):
+        if isinstance(value, datetime.date):
+                return value.strftime(format)
+        # return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S%z').strftime(format)
+        return dateutil.parser.parse(value).strftime(format)
+
+app.jinja_env.filters['datetime_format'] = datetime_format
+
 
 
 #

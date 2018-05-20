@@ -12,7 +12,7 @@
 
 <!-- content of the entry itself -->
 {% block content %}	
-	<p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %I:%M %p') }}</p>
+	<p>Created {{ entry.timestamp | datetimeformat('%m/%d/%Y at %I:%M %p') }}</p>
 	{{ entry.html_content }}
 
 	<!-- delete modal dialog -->

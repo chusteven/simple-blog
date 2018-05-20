@@ -18,6 +18,7 @@
       {% if search %}
       {% set entry = entry.entry %}
       {% endif %}
+
       <!-- a link to the relevant page -->
       <h3>
         <a href="{% if entry.published %}{{ url_for('detail', slug=entry.slug) }}{% else %}{{ url_for('edit', slug=entry.slug) }}{% endif %}">
@@ -27,7 +28,7 @@
       <!-- a preview of the content
       as well as information on when the post was created -->
       <p>{{ entry.html_content_preview(200)}}</p>
-      <p><small><i>Created {{ entry.timestamp.strftime('%m/%d/%Y at %I:%M %p') }}</i></small></p>
+      <p><small><i>Created {{ entry.timestamp | datetimeformat('%m/%d/%Y at %I:%M %p') }}</i></small></p>
 
       {% endfor %}
     </div>
