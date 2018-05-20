@@ -28,7 +28,7 @@
       <!-- a preview of the content
       as well as information on when the post was created -->
       <p>{{ entry.html_content_preview(200)}}</p>
-      <p><small><i>Created {{ entry.timestamp | datetimeformat('%m/%d/%Y at %I:%M %p') }}</i></small></p>
+      <p><small><i>Created {{ entry.timestamp | datetime_format('%m/%d/%Y at %I:%M %p') }}</i></small></p>
 
       {% endfor %}
     </div>
